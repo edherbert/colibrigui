@@ -4,6 +4,7 @@
 #include "ColibriGui/ColibriWindow.h"
 #include "ColibriGui/ColibriSkinManager.h"
 #include "ColibriGui/ColibriLabel.h"
+#include "ColibriGui/ColibriLabelAnimated.h"
 
 #include "ColibriGui/Text/ColibriShaperManager.h"
 
@@ -747,6 +748,15 @@ namespace Colibri
 	Label * colibrigui_nonnull ColibriManager::createWidget<Label>( Widget * colibrigui_nonnull parent )
 	{
 		Label *retVal = _createWidget<Label>( parent );
+		m_labels.push_back( retVal );
+		++m_numLabels;
+		return retVal;
+	}
+	//-------------------------------------------------------------------------
+	template <>
+	LabelAnimated * colibrigui_nonnull ColibriManager::createWidget<LabelAnimated>( Widget * colibrigui_nonnull parent )
+	{
+		LabelAnimated *retVal = _createWidget<LabelAnimated>( parent );
 		m_labels.push_back( retVal );
 		++m_numLabels;
 		return retVal;

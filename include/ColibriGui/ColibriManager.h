@@ -9,6 +9,7 @@ COLIBRIGUI_ASSUME_NONNULL_BEGIN
 
 namespace Colibri
 {
+	class LabelAnimated;
 	typedef std::vector<Label*> LabelVec;
 
 	/**
@@ -467,6 +468,8 @@ namespace Colibri
 
 	template <>
 	Label * colibrigui_nonnull ColibriManager::createWidget<Label>( Widget * colibrigui_nonnull parent );
+	template <>
+	LabelAnimated * colibrigui_nonnull ColibriManager::createWidget<LabelAnimated>( Widget * colibrigui_nonnull parent );
 }
 
 COLIBRIGUI_ASSUME_NONNULL_END

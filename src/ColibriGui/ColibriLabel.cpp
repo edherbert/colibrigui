@@ -753,7 +753,9 @@ namespace Colibri
 #endif
 	}
 	//-------------------------------------------------------------------------
-	inline void Label::addQuad( GlyphVertex * RESTRICT_ALIAS vertexBuffer,
+	void Label::addQuad( GlyphVertex * RESTRICT_ALIAS vertexBuffer,
+								uint32_t glyphId,
+								States::States currentState,
 								Ogre::Vector2 topLeft,
 								Ogre::Vector2 bottomRight,
 								uint16_t glyphWidth,
@@ -965,6 +967,7 @@ namespace Colibri
 				float mostRight	= -std::numeric_limits<float>::max();
 				float mostBottom= -std::numeric_limits<float>::max();
 
+				ShapedGlyphVec::const_iterator beginIt = m_shapes[m_currentState].begin();
 				ShapedGlyphVec::const_iterator itor = m_shapes[m_currentState].begin() +
 													  itRichText->glyphStart;
 				ShapedGlyphVec::const_iterator end  = m_shapes[m_currentState].begin() +
@@ -1030,7 +1033,7 @@ namespace Colibri
 						topLeft		= derivedTopLeft + topLeft * invWindowRes;
 						bottomRight	= derivedTopLeft + bottomRight * invWindowRes;
 
-						addQuad( textVertBuffer,                                               //
+						addQuad( textVertBuffer, std::distance(beginIt, itor), m_currentState,                                              //
 								 topLeft - backgroundDisplacement,                             //
 								 bottomRight + backgroundDisplacement,                         //
 								 1, 1,                                                         //
@@ -1131,6 +1134,7 @@ namespace Colibri
 		const float canvasAr = m_manager->getCanvasAspectRatio();
 		const float invCanvasAr = m_manager->getCanvasInvAspectRatio();
 
+		ShapedGlyphVec::const_iterator beginIt = m_shapes[m_currentState].begin();
 		ShapedGlyphVec::const_iterator itor = m_shapes[m_currentState].begin();
 		ShapedGlyphVec::const_iterator end  = m_shapes[m_currentState].end();
 
@@ -1153,9 +1157,10 @@ namespace Colibri
 				topLeft		= derivedTopLeft + topLeft * invWindowRes;
 				bottomRight	= derivedTopLeft + bottomRight * invWindowRes;
 
+				uint32_t glyphId = std::distance(beginIt, itor);
 				if( m_shadowOutline )
 				{
-					addQuad( textVertBuffer,                                           //
+					addQuad( textVertBuffer, glyphId, m_currentState,                                         //
 							 topLeft + shadowDisplacement,                             //
 							 bottomRight + shadowDisplacement,                         //
 							 shapedGlyph.glyph->width, shapedGlyph.glyph->height,      //
@@ -1168,7 +1173,7 @@ namespace Colibri
 
 				const RichText &richText = m_richText[m_currentState][shapedGlyph.richTextIdx];
 
-				addQuad( textVertBuffer, topLeft, bottomRight,                        //
+				addQuad( textVertBuffer, glyphId, m_currentState, topLeft, bottomRight,                        //
 						 shapedGlyph.glyph->width, shapedGlyph.glyph->height,         //
 						 richText.rgba32, parentDerivedTL, parentDerivedBR, invSize,  //
 						 shapedGlyph.glyph->offsetStart,                              //

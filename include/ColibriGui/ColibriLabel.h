@@ -27,7 +27,9 @@ namespace Colibri
 
 		std::string		m_text[States::NumStates];
 		RichTextVec		m_richText[States::NumStates];
+		protected:
 		ShapedGlyphVec	m_shapes[States::NumStates];
+		private:
 
 		bool m_glyphsDirty[States::NumStates];
 		bool m_glyphsPlaced[States::NumStates];
@@ -56,6 +58,7 @@ namespace Colibri
 
 		//Renderable	*m_background;
 
+		protected:
 		/** Checks RichText doesn't go out of bounds, and patches it if it does.
 			If m_richText[state] is empty we'll create a default one for the whole string.
 		@param state
@@ -71,8 +74,9 @@ namespace Colibri
 		@param bPlaceGlyphs
 			When true, we will also call placeGlyphs
 		*/
-		void updateGlyphs( States::States state, bool bPlaceGlyphs=true );
+		virtual void updateGlyphs( States::States state, bool bPlaceGlyphs=true );
 
+		private:
 		/** Places the glyphs obtained from updateGlyphs at the correct position
 			(always assuming TextHorizAlignment::Left) considering word wrap
 			and size bounds.
@@ -101,7 +105,9 @@ namespace Colibri
 		float findLineMaxHeight( ShapedGlyphVec::const_iterator start,
 								 States::States state ) const;
 
-		inline void addQuad( GlyphVertex * RESTRICT_ALIAS vertexBuffer,
+		virtual void addQuad( GlyphVertex * RESTRICT_ALIAS vertexBuffer,
+							 uint32_t glyphId,
+							 States::States currentState,
 							 Ogre::Vector2 topLeft,
 							 Ogre::Vector2 bottomRight,
 							 uint16_t glyphWidth,

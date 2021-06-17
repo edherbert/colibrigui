@@ -33,6 +33,7 @@
 #include "ColibriGui/ColibriSpinner.h"
 #include "ColibriGui/ColibriProgressbar.h"
 #include "ColibriGui/ColibriSlider.h"
+#include "ColibriGui/ColibriLabelAnimated.h"
 
 #include "ColibriGui/Layouts/ColibriLayoutLine.h"
 #include "ColibriGui/Layouts/ColibriLayoutMultiline.h"
@@ -321,6 +322,15 @@ namespace Demo
 			innerToggleOrder->setTopLeft( Ogre::Vector2(0, 120) );
 			innerToggleOrder->addActionListener(demoActionListener);
 			innerToggleOrder->sizeToFit();
+		}
+
+		{
+			Colibri::Window* testWindow1 = colibriManager->createWindow( 0 );
+			testWindow1->setTransform(Ogre::Vector2(1200, 550), Ogre::Vector2(300, 300));
+
+			Colibri::LabelAnimated* label = colibriManager->createWidget<Colibri::LabelAnimated>(testWindow1);
+			label->setText("This is some text");
+			label->sizeToFit();
 		}
 
 #if 0
