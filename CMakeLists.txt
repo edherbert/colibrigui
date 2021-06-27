@@ -108,7 +108,8 @@ else()
 	add_library( ${PROJECT_NAME} STATIC ${SOURCES} ${HEADERS} )
 endif()
 
-target_link_libraries( ${PROJECT_NAME} icucommon ${HARFBUZZ_LIBRARIES} ${FREETYPE_LIBRARIES} ${ZLIB_LIBRARIES} )
+set(LINK_LIBS "icucommon;${HARFBUZZ_LIBRARIES};${FREETYPE_LIBRARIES};${ZLIB_LIBRARIES}")
+target_link_libraries( ${PROJECT_NAME} ${LINK_LIBS} )
 target_link_libraries( ${PROJECT_NAME} ${OGRE_LIBRARIES} )
 
 if( UNIX )
@@ -141,3 +142,34 @@ if( ${CMAKE_VERSION} VERSION_GREATER 3.9 )
 		doxygen_add_docs( doxygen ${SOURCES} ${HEADERS} )
 	endif()
 endif()
+
+
+# Library installation directory
+if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
+    set(CMAKE_INSTALL_LIBDIR lib)
+endif(NOT DEFINED CMAKE_INSTALL_LIBDIR)
+set(libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+
+if( COLIBRIGUI_LIB_ONLY )
+	install(
+		TARGETS ${LINK_LIBS} ${PROJECT_NAME}
+		LIBRARY DESTINATION "${libdir}"
+		ARCHIVE DESTINATION "${libdir}"
+		RUNTIME DESTINATION "bin"
+	)
+endif()
+
+install(
+	DIRECTORY "include/ColibriGui"
+	DESTINATION "include"
+)
+
+install(
+	DIRECTORY "bin/Data/"
+	DESTINATION "data"
+)
+
+install(
+    DIRECTORY Dependencies/
+    DESTINATION "dependencies"
+)
